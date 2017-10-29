@@ -1,0 +1,57 @@
+LOAD   000000 -- array length
+DEC
+STORE  000011 -- loop main
+LOAD   000011 -- loop main; m:MAIN_LOOP
+STORE  000100 -- loop inner
+LOAD   000101 -- array base
+DEC
+STORE  100001 -- to FSR
+
+LOAD   100001 -- FSR; m:INNER_LOOP
+INC
+STORE  100001 -- to FSR
+
+LOAD   100000 -- from INDF
+STORE  000001 -- previous
+
+LOAD   100001 -- FSR
+INC
+STORE  100001 -- to FSR
+
+LOAD   100000 -- from INDF
+SUB    000001 -- previous
+
+JNSB   000000 --! GOTO SKIP
+
+LOAD   100000 -- from INDF; m:SWAP
+STORE  000010 -- tmp
+
+LOAD   000001 -- previous
+STORE  100000 -- to INDF
+
+LOAD   100001 -- FSR
+DEC
+STORE  100001 -- to FSR
+
+LOAD  000010 -- tmp
+STORE  100000 -- to INDF
+
+LOAD   100001 -- FSR
+INC
+STORE  100001 -- to FSR
+
+LOAD   100001 -- FSR; m:SKIP
+DEC
+STORE  100001 -- to FSR
+
+LOAD   000100 -- loop inner
+DEC
+STORE  000100 -- loop inner
+JNZ    000000 --! GOTO INNER_LOOP
+
+LOAD   000011 -- loop main
+DEC
+STORE  000011 -- loop main
+JNZ    000000 --! GOTO MAIN_LOOP
+
+HALT
